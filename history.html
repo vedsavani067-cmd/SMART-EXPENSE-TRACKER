@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History | Smart Expense Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); background-size: 200% 200%; animation: gradientShift 15s ease infinite; }
+    @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
+  </style>
+</head>
+
+<body class="font-[Inter] min-h-screen text-white p-0 m-0" onload="initHistory()">
+  <aside class="fixed left-0 top-0 h-screen w-64 glass p-8 flex flex-col z-20">
+    <div class="text-xl font-bold mb-8 flex items-center gap-3">
+      <span class="text-2xl">💰</span><span>Expense Tracker</span>
+    </div>
+    <nav class="flex-1 space-y-2">
+      <a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">📌 Dashboard</a>
+      <a href="add-income.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">🟢 Add Income</a>
+      <a href="add-expense.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">🔴 Add Expense</a>
+      <a href="history.html" class="flex items-center gap-3 p-3 rounded-xl bg-white/10 text-white border border-white/20">🧾 History</a>
+      <a href="reports.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">📊 Reports</a>
+    </nav>
+    <a href="login.html" onclick="sessionStorage.removeItem('currentUser')" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all mt-auto">🚪 Logout</a>
+  </aside>
+
+  <main class="ml-64 p-8 pt-20">
+    <header class="mb-8 flex justify-between items-end">
+      <div>
+        <h1 class="text-4xl font-bold mb-2">Transaction History</h1>
+        <p class="text-xl text-gray-300">View and manage your records</p>
+      </div>
+      <button onclick="exportCSV()"
+        class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-xl font-semibold transition-all shadow-lg shadow-indigo-500/20">
+        Export CSV
+      </button>
+    </header>
+
+    <div class="grid grid-cols-3 gap-6 mb-8">
+      <div class="glass p-6 rounded-2xl text-center">
+        <div class="text-3xl font-bold text-white mb-1" id="totalTransactions">0</div>
+        <div class="text-gray-400 text-sm">Total Count</div>
+      </div>
+      <div class="glass p-6 rounded-2xl text-center">
+        <div class="text-3xl font-bold text-green-400 mb-1" id="totalIncomeHist">0</div>
+        <div class="text-gray-400 text-sm">Total Income</div>
+      </div>
+      <div class="glass p-6 rounded-2xl text-center">
+        <div class="text-3xl font-bold text-red-400 mb-1" id="totalExpenseHist">0</div>
+        <div class="text-gray-400 text-sm">Total Expenses</div>
+      </div>
+    </div>
+
+    <div class="glass rounded-2xl overflow-hidden">
+      <div id="transactionsList" class="divide-y divide-white/10"></div>
+      <div id="noTransactions" class="p-12 text-center text-gray-400 hidden">
+        No transactions found. <a href="add-expense.html" class="text-indigo-400 hover:underline">Add one?</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const MAX_AMOUNT = 10000000; // 1 Cr
+
+function safeAmount(x) {
+  const n = Number(String(x ?? "").replaceAll(",", "").trim());
+  if (!Number.isFinite(n)) return 0;
+  if (n < 1 || n > MAX_AMOUNT) return 0;
+  return n;
+}
+
+    let transactions = [];
+    let currentUser = null;
+
+    function requireLogin() {
+      const u = JSON.parse(sessionStorage.getItem("currentUser") || "null");
+      if (!u) { window.location.href = "login.html"; return null; }
+      if (!localStorage.getItem("transactions")) localStorage.setItem("transactions", "[]");
+      return u;
+    }
+
+    function initHistory() {
+      currentUser = requireLogin();
+      if (!currentUser) return;
+
+      const allTx = JSON.parse(localStorage.getItem("transactions") || "[]");
+      transactions = allTx.filter(t => t.userId === currentUser.id);
+      renderTransactions();
+    }
+
+    function renderTransactions() {
+      const list = document.getElementById("transactionsList");
+      const noData = document.getElementById("noTransactions");
+
+      if (transactions.length === 0) {
+        list.innerHTML = "";
+        noData.classList.remove("hidden");
+        updateStats(0, 0, 0);
+        return;
+      }
+
+      noData.classList.add("hidden");
+
+      let totalInc = 0;
+      let totalExp = 0;
+
+      const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      list.innerHTML = sorted.map(t => {
+        const isIncome = t.type === "income";
+        const amount = safeAmount(t.amount);
+        if (isIncome) totalInc += amount;
+        else totalExp += amount;
+
+        const badge = isIncome
+          ? "bg-green-500/20 text-green-400"
+          : "bg-red-500/20 text-red-400";
+
+        const title = t.category || "Transaction";
+        const dateStr = t.date ? new Date(t.date).toLocaleDateString() : "";
+        const desc = t.description ? t.description : "No description";
+
+        return `
+          <div class="flex items-center justify-between p-6 hover:bg-white/5 transition-colors group">
+            <div>
+              <div class="font-semibold text-lg">${title}</div>
+              <div class="text-sm text-gray-400">${dateStr} • ${desc}</div>
+            </div>
+            <div class="flex items-center gap-6">
+              <div class="font-bold text-xl ${isIncome ? "text-green-400" : "text-red-400"}">
+                ${isIncome ? "+" : "-"}₹${amount.toLocaleString()}
+              </div>
+              <button onclick="deleteTransaction(${t.id})"
+                class="text-gray-500 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 px-2">
+                ✕
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      updateStats(sorted.length, totalInc, totalExp);
+    }
+
+    function updateStats(count, income, expense) {
+      document.getElementById("totalTransactions").textContent = count;
+      document.getElementById("totalIncomeHist").textContent = "₹" + income.toLocaleString();
+      document.getElementById("totalExpenseHist").textContent = "₹" + expense.toLocaleString();
+    }
+
+    function deleteTransaction(id) {
+      if (!confirm("Are you sure you want to delete this record?")) return;
+
+      const allTx = JSON.parse(localStorage.getItem("transactions") || "[]");
+      const filtered = allTx.filter(t => t.id !== id);
+      localStorage.setItem("transactions", JSON.stringify(filtered));
+
+      initHistory();
+    }
+
+    function exportCSV() {
+      if (transactions.length === 0) return alert("No data to export");
+
+      const rows = [
+        ["Date", "Type", "Category", "Amount", "Description"]
+      ].concat(transactions.map(t => [
+        t.date || "",
+        t.type || "",
+        t.category || "",
+        t.amount || "",
+        t.description || ""
+      ]));
+
+      const csvContent = "data:text/csv;charset=utf-8," + rows.map(r => r.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "transactions.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Income | Smart Expense Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="font-[Inter] min-h-screen text-white p-0 m-0">
+  <aside class="fixed left-0 top-0 h-screen w-64 glass p-8 flex flex-col z-20 animate-fade-in-up">
+    <div class="text-xl font-bold mb-8 flex items-center gap-3">
+      <span class="text-2xl">💸</span>
+      <span>Expense Tracker</span>
+    </div>
+
+    <nav class="flex-1 space-y-2">
+      <a href="dashboard.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">
+        <span>🏠</span><span>Dashboard</span>
+      </a>
+      <a href="add-income.html" class="flex items-center gap-3 p-3 rounded-xl bg-white/10 text-white border border-white/20">
+        <span>➕</span><span>Add Income</span>
+      </a>
+      <a href="add-expense.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">
+        <span>➖</span><span>Add Expense</span>
+      </a>
+      <a href="history.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">
+        <span>🧾</span><span>History</span>
+      </a>
+      <a href="reports.html" class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all">
+        <span>📊</span><span>Reports</span>
+      </a>
+    </nav>
+
+    <a href="login.html"
+       onclick="sessionStorage.removeItem('currentUser')"
+       class="flex items-center gap-3 p-3 rounded-lg text-gray-300 hover:bg-white/10 transition-all mt-auto">
+      <span>🚪</span><span>Logout</span>
+    </a>
+  </aside>
+
+  <main class="ml-64 p-8 pt-20">
+    <header class="animate-fade-in-up mb-12">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center text-2xl">🟢</div>
+        <div>
+          <h1 class="text-4xl font-bold">Add Income</h1>
+          <p class="text-xl text-gray-300">Record your earnings</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-2xl animate-fade-in-up">
+      <div class="glass p-8 rounded-3xl">
+        <form id="incomeForm" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-3">Amount</label>
+            <div class="relative">
+              <span class="absolute left-4 top-4 text-2xl text-gray-400">₹</span>
+              <!-- LIMIT 1 Cr -->
+              <input
+                type="number"
+                id="amount"
+                required
+                min="1"
+                max="10000000"
+                step="1"
+                class="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-2xl font-bold text-white focus:outline-none focus:ring-2 ring-green-500 transition-all"
+                placeholder="0"
+              />
+            </div>
+            <p class="text-xs text-gray-400 mt-2">Max allowed: 1,00,00,000 (1 Cr)</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-3">Source</label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="cursor-pointer">
+                <input type="radio" name="source" value="Salary" class="peer sr-only" checked />
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 peer-checked:bg-green-500/20 peer-checked:border-green-500 transition-all text-center">
+                  <div class="text-sm font-semibold">Salary</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="source" value="Freelance" class="peer sr-only" />
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 peer-checked:bg-green-500/20 peer-checked:border-green-500 transition-all text-center">
+                  <div class="text-sm font-semibold">Freelance</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="source" value="Investment" class="peer sr-only" />
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 peer-checked:bg-green-500/20 peer-checked:border-green-500 transition-all text-center">
+                  <div class="text-sm font-semibold">Investment</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-3">Date</label>
+              <input
+                type="date"
+                id="date"
+                required
+                class="w-full p-4 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 ring-green-500 transition-all"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-3">Description</label>
+              <input
+                type="text"
+                id="description"
+                class="w-full p-4 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 ring-green-500 transition-all"
+                placeholder="Optional note"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-4 pt-4">
+            <button
+              type="submit"
+              class="flex-1 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-green-500/20 transition-all transform hover:scale-[1.02]"
+            >
+              Add Income
+            </button>
+            <a
+              href="dashboard.html"
+              class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-2xl transition-all"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    
+    function requireLogin() {
+      const u = JSON.parse(sessionStorage.getItem("currentUser") || "null");
+      if (!u) {
+        window.location.href = "login.html";
+        return null;
+      }
+      if (!localStorage.getItem("transactions")) localStorage.setItem("transactions", "[]");
+      return u;
+    }
+    const __user = requireLogin();
+    if (__user) {
+      const dateEl = document.getElementById("date");
+      if (dateEl) dateEl.valueAsDate = new Date();
+    }
+
+    document.getElementById("incomeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const currentUser = requireLogin();
+      if (!currentUser) return;
+
+      const MAXINCOME = 10000000; // 1 Cr
+
+      const amountStr = document.getElementById("amount").value;
+      const source = document.querySelector("input[name='source']:checked").value;
+      const date = document.getElementById("date").value;
+      const description = document.getElementById("description").value;
+
+      if (!amountStr || !source || !date) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      const amt = Number(amountStr);
+
+      if (!Number.isFinite(amt) || !Number.isInteger(amt)) {
+        alert("Please enter a valid whole number amount.");
+        return;
+      }
+
+      if (amt < 1 || amt > MAXINCOME) {
+        alert("Income must be between 1 and 1,00,00,000 (1 Cr).");
+        return;
+      }
+
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+
+      const income = {
+        id: Date.now(),
+        type: "income",
+        amount: amt,
+        category: source,
+        description: description,
+        date: date,
+
+        userId: currentUser.id,
+        userName: currentUser.name,
+        userEmail: currentUser.email
+      };
+
+      transactions.push(income);
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+
+      alert("Income added successfully!");
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

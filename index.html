@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Expense Tracker | Master Your Finances</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    
+    .glass { 
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .text-gradient{
+  background: linear-gradient(to right, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  background-clip: text;            /* standard */
+  -webkit-text-fill-color: transparent; /* WebKit */
+}
+
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+  </style>
+</head>
+<body class="font-inter min-h-screen text-white m-0 p-0 overflow-x-hidden">
+
+  <nav class="fixed w-full z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">💰</span>
+        <span class="text-xl font-bold tracking-tight">SmartExpenseTracker</span>
+      </div>
+      <div class="flex gap-4">
+        <a href="admin-login.html" class="hidden md:block px-6 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors">Admin Portal</a>
+        <a href="login.html" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-full font-semibold transition-all shadow-lg shadow-indigo-500/20">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="relative pt-32 pb-20 px-6 min-h-screen flex items-center">
+    <div class="absolute top-20 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-float -z-10"></div>
+    <div class="absolute bottom-20 left-0 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-float -z-10" style="animation-delay: 2s;"></div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-8">
+        <div class="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-indigo-300 animate-fade-in-up">
+          ✨ Voted #1 Personal Finance Tool
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold leading-tight animate-fade-in-up delay-100">
+          Master Your Money <br>
+          <span class="text-gradient">Intelligently.</span>
+        </h1>
+        
+        <p class="text-xl text-gray-300 max-w-lg animate-fade-in-up delay-200">
+          Stop guessing where your money goes. Track <strong>Groceries</strong>, <strong>Bills</strong>, <strong>Dining</strong>, and more with our real-time dashboard and intuitive reporting tools.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-300">
+          <a href="login.html" class="px-8 py-4 bg-white text-indigo-900 font-bold rounded-2xl text-center hover:bg-gray-100 transition-all transform hover:scale-105">
+            Get Started Now
+          </a>
+          <a href="#features" class="px-8 py-4 glass border border-white/20 font-bold rounded-2xl text-center hover:bg-white/10 transition-all">
+            Learn More
+          </a>
+        </div>
+      </div>
+
+      <div class="relative hidden lg:block animate-fade-in-up delay-300">
+        <div class="glass p-6 rounded-3xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <div class="text-gray-400 text-sm">Total Balance</div>
+              <div class="text-3xl font-bold">₹45,230</div>
+            </div>
+            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-2xl">📈</div>
+          </div>
+          <div class="space-y-3">
+            <div class="h-2 bg-white/10 rounded-full w-full overflow-hidden">
+              <div class="h-full bg-indigo-500 w-3/4"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-400">
+              <span>Monthly Budget</span>
+              <span>75% Spent</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="absolute -bottom-10 -left-10 glass p-4 rounded-2xl flex items-center gap-4 animate-float shadow-xl" style="animation-delay: 1s;">
+          <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-xl">🛒</div>
+          <div>
+            <div class="font-bold">-₹2,450</div>
+            <div class="text-xs text-gray-400">Groceries</div>
+          </div>
+        </div>
+
+        <div class="absolute -top-5 -right-5 glass p-4 rounded-2xl flex items-center gap-4 animate-float shadow-xl" style="animation-delay: 2.5s;">
+          <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">💡</div>
+          <div>
+            <div class="font-bold">-₹1,200</div>
+            <div class="text-xs text-gray-400">Electricity Bill</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="py-24 px-6 relative">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-5xl font-bold mb-4">Powerful Features</h2>
+        <p class="text-gray-400">Everything you need to manage your finances in one place.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="glass p-8 rounded-3xl hover:bg-white/10 transition-all group">
+          <div class="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+            📊
+          </div>
+          <h3 class="text-xl font-bold mb-3">Real-time Analytics</h3>
+          <p class="text-gray-400 leading-relaxed">
+            Visualize your income and expenses with dynamic charts. See exactly where your money goes every month.
+          </p>
+        </div>
+
+        <div class="glass p-8 rounded-3xl hover:bg-white/10 transition-all group">
+          <div class="w-16 h-16 rounded-2xl bg-amber-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+            📁
+          </div>
+          <h3 class="text-xl font-bold mb-3">Comprehensive Categories</h3>
+          <p class="text-gray-400 leading-relaxed">
+            Effortlessly tag expenses as <strong>Food, Groceries, Transport, Bills, Shopping, Entertainment, Health, or Education</strong>. Get granular insights into your lifestyle spending.
+          </p>
+        </div>
+
+        <div class="glass p-8 rounded-3xl hover:bg-white/10 transition-all group">
+          <div class="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+            🛡️
+          </div>
+          <h3 class="text-xl font-bold mb-3">Secure & Private</h3>
+          <p class="text-gray-400 leading-relaxed">
+            Your financial data is stored securely in your local browser environment. We prioritize your privacy above all else.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 px-6 bg-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">How It Works</h2>
+          <div class="space-y-8">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">1</div>
+              <div>
+                <h3 class="text-xl font-bold mb-1">Create an Account</h3>
+                <p class="text-gray-400">Sign up in seconds and access your personal dashboard.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">2</div>
+              <div>
+                <h3 class="text-xl font-bold mb-1">Add Transactions</h3>
+                <p class="text-gray-400">Quickly log income or expenses like <strong>Groceries</strong> and <strong>Bills</strong> with our easy forms.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">3</div>
+              <div>
+                <h3 class="text-xl font-bold mb-1">View Reports</h3>
+                <p class="text-gray-400">Check your history and charts to make better financial decisions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="glass p-8 rounded-3xl relative">
+          <div class="space-y-4 opacity-80">
+            <div class="h-4 bg-white/20 rounded w-1/3"></div>
+            <div class="h-32 bg-white/10 rounded-xl"></div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="h-20 bg-white/10 rounded-xl"></div>
+              <div class="h-20 bg-white/10 rounded-xl"></div>
+              <div class="h-20 bg-white/10 rounded-xl"></div>
+            </div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <a href="login.html" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold shadow-lg transform hover:scale-105 transition-all">
+              Try Demo Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10 bg-slate-900 pt-12 pb-8 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">💰</span>
+        <span class="text-lg font-bold">Smart Expense Tracker</span>
+      </div>
+      <div class="text-gray-400 text-sm">
+        &copy; 2026 SmartExpenseTracker. All rights reserved.
+      </div>
+      <div class="flex gap-6">
+        <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+        <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+        <a href="admin-login.html" class="text-amber-500 hover:text-amber-400 transition-colors">Admin</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

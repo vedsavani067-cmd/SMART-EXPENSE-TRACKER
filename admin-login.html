@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Smart Expense Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    .glass { 
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  </style>
+</head>
+<body class="font-inter min-h-screen text-white flex items-center justify-center p-4">
+
+  <div class="glass w-full max-w-md p-8 rounded-3xl shadow-2xl relative overflow-hidden border-amber-500/20">
+    <div class="absolute top-0 left-0 w-full h-full bg-amber-500/5 blur-3xl -z-10"></div>
+
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-amber-500/20 text-4xl mb-6 animate-float shadow-lg shadow-amber-500/20">
+        🔐
+      </div>
+      <h1 class="text-3xl font-bold mb-2">Admin Portal</h1>
+      <p class="text-gray-400">Restricted access only</p>
+    </div>
+
+    <div id="adminError" class="hidden mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-200 text-sm text-center">
+      ⚠️ Access Denied.
+    </div>
+
+    <form onsubmit="handleAdminLogin(event)">
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Admin Email</label>
+          <input type="email" id="adminEmail" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all" placeholder="admin@company.com" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Security Key</label>
+          <input type="password" id="adminPass" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-amber-500/30 transform hover:scale-[1.02]">
+          Access Dashboard
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 text-center border-t border-white/10 pt-6">
+      <a href="login.html" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors">
+        <span>←</span> Back to User Login
+      </a>
+    </div>
+  </div>
+
+ <script>
+  function handleAdminLogin(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("adminEmail").value.trim().toLowerCase();
+    const pass = document.getElementById("adminPass").value;
+
+    const errorDiv = document.getElementById("adminError");
+
+    if (email === "admin@expense.com" && pass === "adminPass99") {
+      errorDiv.classList.add("hidden");
+      sessionStorage.setItem("isAdmin", "true");
+      window.location.href = "admin-dashboard.html";
+    } else {
+      errorDiv.textContent = "Invalid Admin Credentials!";
+      errorDiv.classList.remove("hidden");
+
+      const card = document.querySelector(".glass");
+      card.classList.add("animate-pulse");
+      setTimeout(() => card.classList.remove("animate-pulse"), 500);
+    }
+  }
+</script>
+
+</body>
+</html>
