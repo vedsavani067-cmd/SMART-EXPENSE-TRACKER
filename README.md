@@ -224,7 +224,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 Author
 
-**Vedant Savani**
+**Ved Savani**
 - GitHub: [@vedsavani067-cmd](https://github.com/vedsavani067-cmd)
 - Repository: [SMART-EXPENSE-TRACKER](https://github.com/vedsavani067-cmd/SMART-EXPENSE-TRACKER)
 
